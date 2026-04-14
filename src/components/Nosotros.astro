@@ -1,0 +1,86 @@
+---
+---
+<section id="nosotros">
+  <div class="container">
+    <div class="nosotros-grid">
+      <div class="nosotros-left fade-in">
+        <span class="label">Quiénes Somos</span>
+        <div class="big-quote">
+          Aliados estratégicos del<br>
+          <em>diseño arquitectónico</em><br>
+          de lujo
+        </div>
+        <div class="red-bar"></div>
+        <p>
+          Red Mangle es una empresa mexicana especializada en soluciones de fibra de vidrio y arquitectura decorativa para proyectos de alto nivel en la Riviera Maya y toda la República Mexicana.
+        </p>
+        <p>
+          Trabajamos directamente con arquitectos, diseñadores de interiores y cadenas hoteleras para transformar conceptos creativos en estructuras duraderas y visualmente impactantes.
+        </p>
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="stat-num" data-target="15">0</div>
+            <div class="stat-label">Años de<br>Experiencia</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="50">0</div>
+            <div class="stat-label">Proyectos<br>Entregados</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="30">0</div>
+            <div class="stat-label">Millones USD<br>Ejecutados</div>
+          </div>
+        </div>
+      </div>
+      <div class="nosotros-right fade-in" style="transition-delay:0.15s">
+        <div class="nosotros-card">
+          <p>
+            Con más de 15 años de experiencia en el mercado, Red Mangle (Construfibra &amp; Eventos S de RL de CV) ha consolidado su posición como proveedor preferente de estructuras decorativas en fibra de vidrio para hoteles y desarrollos inmobiliarios de clase mundial.
+          </p>
+          <p>
+            Nuestro portafolio incluye proyectos para cadenas como Four Seasons, Royalton, Xcaret, Hard Rock, Hyatt, Westin y Margaritaville, así como obras de infraestructura nacional como las estaciones del Tren Maya (SEDENA).
+          </p>
+          <p>
+            Fabricamos e instalamos cada pieza bajo los más altos estándares de calidad, garantizando resistencia, precisión y acabados de nivel internacional.
+          </p>
+          <div class="cert-badges">
+            <span class="badge">Fabricación Propia</span>
+            <span class="badge">Instalación Certificada</span>
+            <span class="badge">Fibra de Vidrio</span>
+            <span class="badge">Proyectos Llave en Mano</span>
+            <span class="badge">Riviera Maya</span>
+            <span class="badge">Todo México</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function animateCounter(el: HTMLElement, target: number, suffix: string) {
+    const duration = 1800;
+    const start = performance.now();
+    const update = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target) + (progress === 1 ? suffix : '');
+      if (progress < 1) requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+  }
+
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target as HTMLElement;
+        const target = parseInt(el.dataset.target!, 10);
+        const suffix = el.dataset.target === '30' ? 'M+' : '+';
+        animateCounter(el, target, suffix);
+        statObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.stat-num[data-target]').forEach(el => statObserver.observe(el));
+</script>

@@ -1,0 +1,129 @@
+---
+---
+<section id="contacto">
+  <div class="container">
+    <div class="contacto-grid">
+      <div class="contacto-left fade-in">
+        <span class="label">Hablemos</span>
+        <h2 class="section-title">Inicia tu <span>proyecto</span></h2>
+        <p class="tagline">Cuéntanos sobre tu proyecto y te presentamos una propuesta personalizada.</p>
+
+        <div class="contact-detail">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+          </div>
+          <div class="contact-text">
+            <strong>Teléfonos</strong>
+            <span>
+              <a href="tel:+529988503011">(+52) 998 850 3011</a><br>
+              <a href="tel:+529988495507">(+52) 998 849 5507</a>
+            </span>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="contact-text">
+            <strong>Correo Electrónico</strong>
+            <a href="mailto:ventas@redmangle.com">ventas@redmangle.com</a>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="contact-text">
+            <strong>Dirección</strong>
+            <span>Carretera Cancún–Aeropuerto km 17<br>Bld Luis Donaldo Colosio, calle Monte Líbano<br>C.P. 77560, Cancún Q.R., México</span>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="contact-text">
+            <strong>Horario</strong>
+            <span>Lunes – Viernes: 8:00 – 18:00<br>Sábado: 9:00 – 14:00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contacto-right fade-in" style="transition-delay:0.15s">
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre">Nombre *</label>
+              <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+            </div>
+            <div class="form-group">
+              <label for="empresa">Empresa</label>
+              <input type="text" id="empresa" name="empresa" placeholder="Tu empresa" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Correo *</label>
+              <input type="email" id="email" name="email" placeholder="tu@empresa.com" required />
+            </div>
+            <div class="form-group">
+              <label for="tel">Teléfono</label>
+              <input type="tel" id="tel" name="tel" placeholder="+52 998 000 0000" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="servicio">Servicio de Interés</label>
+            <select id="servicio" name="servicio">
+              <option value="">Selecciona un servicio...</option>
+              <option>Pergolados</option>
+              <option>Celosías</option>
+              <option>Plafones</option>
+              <option>Decorativos</option>
+              <option>Mamparas</option>
+              <option>Macetas</option>
+              <option>Morillos y Bamboos</option>
+              <option>Proyecto integral</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="mensaje">Mensaje *</label>
+            <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos sobre tu proyecto: ubicación, dimensiones estimadas, tipo de acabado..." required></textarea>
+          </div>
+          <div class="form-submit">
+            <button type="submit" class="btn btn-primary">
+              Enviar Solicitud
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById('contactForm')!.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const nombre = (form.elements.namedItem('nombre') as HTMLInputElement).value.trim();
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value.trim();
+    const mensaje = (form.elements.namedItem('mensaje') as HTMLTextAreaElement).value.trim();
+    if (!nombre || !email || !mensaje) {
+      alert('Por favor completa los campos obligatorios.');
+      return;
+    }
+    const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    btn.textContent = '¡Mensaje enviado!';
+    btn.style.background = '#2a9d5c';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.innerHTML = 'Enviar Solicitud <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>';
+      btn.style.background = '';
+      btn.disabled = false;
+      form.reset();
+    }, 3500);
+  });
+</script>
