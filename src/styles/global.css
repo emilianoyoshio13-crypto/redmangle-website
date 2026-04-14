@@ -612,10 +612,6 @@ a { text-decoration: none; color: inherit; }
   gap: 12px;
   flex-wrap: wrap;
 }
-.project-value {
-  color: rgba(200,16,46,0.9);
-  font-weight: 700;
-}
 .proj-1  { background: linear-gradient(135deg, #1a0a0d, #2d1018); }
 .proj-2  { background: linear-gradient(135deg, #0a0a1a, #101030); }
 .proj-3  { background: linear-gradient(135deg, #0d1a0a, #1a2d10); }
