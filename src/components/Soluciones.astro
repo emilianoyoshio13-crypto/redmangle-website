@@ -1,5 +1,98 @@
 ---
+const services = [
+  {
+    id: 'pergolados',
+    num: '01',
+    title: 'Pergolados',
+    desc: 'Estructuras decorativas techadas para exteriores de lujo, piscinas y áreas de descanso en resorts y hoteles.',
+    icon: `<svg viewBox="0 0 48 48"><path d="M4 36 L24 12 L44 36" /><path d="M4 36 H44" /><path d="M8 36 V44 M40 36 V44" /><path d="M14 28 H34" /></svg>`,
+    projects: [
+      { name: 'Royalton Riviera Cancún', location: 'Riviera Maya', year: '2022' },
+      { name: 'Hotel AVA Cancún',        location: 'Cancún',       year: '2023' },
+      { name: 'Westin Cancún',           location: 'Cancún',       year: '2020' },
+      { name: 'Hyatt Ziva Cancún',       location: 'Cancún',       year: '2019' },
+    ],
+  },
+  {
+    id: 'celosias',
+    num: '02',
+    title: 'Celosías',
+    desc: 'Paneles calados de fibra de vidrio para fachadas, divisiones y elementos decorativos en interiores y exteriores.',
+    icon: `<svg viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="1"/><line x1="14" y1="6" x2="14" y2="42"/><line x1="22" y1="6" x2="22" y2="42"/><line x1="30" y1="6" x2="30" y2="42"/><line x1="6" y1="14" x2="42" y2="14"/><line x1="6" y1="22" x2="42" y2="22"/><line x1="6" y1="30" x2="42" y2="30"/></svg>`,
+    projects: [
+      { name: 'Royalton Riviera Cancún',   location: 'Riviera Maya',       year: '2022' },
+      { name: 'Xcaret Arte',               location: 'Quintana Roo',       year: '2020' },
+      { name: 'Paradisus Playa del Carmen',location: 'Riviera Maya',       year: '2017' },
+      { name: 'Hard Rock Riviera Maya',    location: 'Riviera Maya',       year: '2018' },
+    ],
+  },
+  {
+    id: 'plafones',
+    num: '03',
+    title: 'Plafones',
+    desc: 'Techos decorativos con diseños personalizados: curvos, artísticos y funcionales para lobbies, restaurantes y spas.',
+    icon: `<svg viewBox="0 0 48 48"><path d="M4 20 Q24 8 44 20"/><path d="M4 20 H44"/><path d="M8 20 V38 H40 V20"/><path d="M16 38 V44 M32 38 V44"/></svg>`,
+    projects: [
+      { name: 'Royalton Riviera Cancún', location: 'Riviera Maya', year: '2022' },
+      { name: 'Tren Maya — SEDENA',      location: 'Nacional',     year: '2023' },
+      { name: 'Aloft Cancún',            location: 'Cancún',       year: '2021' },
+      { name: 'Secrets Moxche',          location: 'Playa del Carmen', year: '2022' },
+    ],
+  },
+  {
+    id: 'decorativos',
+    num: '04',
+    title: 'Decorativos',
+    desc: 'Piezas artísticas únicas, esculturas, elementos ornamentales y aplicaciones especiales diseñadas a medida.',
+    icon: `<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="8"/><line x1="24" y1="4" x2="24" y2="12"/><line x1="24" y1="36" x2="24" y2="44"/><line x1="4" y1="24" x2="12" y2="24"/><line x1="36" y1="24" x2="44" y2="24"/></svg>`,
+    projects: [
+      { name: 'Four Seasons East Cape', location: 'Los Cabos',     year: '2021' },
+      { name: 'Xcaret Arte',            location: 'Quintana Roo',  year: '2020' },
+      { name: 'Tren Maya — SEDENA',     location: 'Nacional',      year: '2023' },
+      { name: 'Aloft Cancún',           location: 'Cancún',        year: '2021' },
+    ],
+  },
+  {
+    id: 'mamparas',
+    num: '05',
+    title: 'Mamparas',
+    desc: 'Divisiones y separadores decorativos para espacios interiores, restaurantes, lobbies y áreas de recreación.',
+    icon: `<svg viewBox="0 0 48 48"><rect x="6" y="4" width="10" height="40" rx="1"/><rect x="32" y="4" width="10" height="40" rx="1"/><path d="M16 12 Q24 8 32 12"/><path d="M16 24 Q24 20 32 24"/><path d="M16 36 Q24 32 32 36"/></svg>`,
+    projects: [
+      { name: 'Four Seasons East Cape', location: 'Los Cabos',  year: '2021' },
+      { name: 'Hyatt Ziva Cancún',      location: 'Cancún',     year: '2019' },
+      { name: 'Tren Maya — SEDENA',     location: 'Nacional',   year: '2023' },
+    ],
+  },
+  {
+    id: 'macetas',
+    num: '06',
+    title: 'Macetas',
+    desc: 'Jardineras decorativas de fibra de vidrio de alta durabilidad, en cualquier forma, tamaño y acabado.',
+    icon: `<svg viewBox="0 0 48 48"><ellipse cx="24" cy="38" rx="14" ry="6"/><path d="M10 38 Q10 20 18 16 Q24 10 30 16 Q38 20 38 38"/><path d="M20 16 Q24 4 28 16"/></svg>`,
+    projects: [
+      { name: 'Secrets Moxche',         location: 'Playa del Carmen', year: '2022' },
+      { name: 'Westin Cancún',          location: 'Cancún',           year: '2020' },
+      { name: 'Margaritaville Resort',  location: 'Cancún',           year: '2022' },
+    ],
+  },
+  {
+    id: 'morillos',
+    num: '07',
+    title: 'Morillos y Bamboos',
+    desc: 'Simulación de bamboo y madera en fibra de vidrio: la estética natural con la durabilidad del composite. Ideal para exteriores costeros.',
+    icon: `<svg viewBox="0 0 48 48"><line x1="12" y1="44" x2="12" y2="8"/><line x1="24" y1="44" x2="24" y2="4"/><line x1="36" y1="44" x2="36" y2="10"/><path d="M8 8 Q12 2 16 8"/><path d="M20 4 Q24 0 28 4"/><path d="M32 10 Q36 4 40 10"/></svg>`,
+    projects: [
+      { name: 'Hotel AVA Cancún',        location: 'Cancún',      year: '2023' },
+      { name: 'Hard Rock Riviera Maya',  location: 'Riviera Maya',year: '2018' },
+      { name: 'Margaritaville Resort',   location: 'Cancún',      year: '2022' },
+    ],
+  },
+];
+
+const delays = ['0s','0.05s','0.10s','0.15s','0.20s','0.25s','0.30s'];
 ---
+
 <section id="soluciones">
   <div class="container">
     <div class="section-header fade-in">
@@ -10,70 +103,355 @@
       <p>Soluciones integrales en fibra de vidrio y materiales compuestos para proyectos arquitectónicos de alto impacto.</p>
     </div>
     <div class="services-grid">
-
-      <div class="service-card fade-in">
-        <div class="service-num">01</div>
-        <div class="service-icon">
-          <svg viewBox="0 0 48 48"><path d="M4 36 L24 12 L44 36" /><path d="M4 36 H44" /><path d="M8 36 V44 M40 36 V44" /><path d="M14 28 H34" /></svg>
+      {services.map((s, i) => (
+        <div
+          class="service-card fade-in"
+          style={`transition-delay:${delays[i]}`}
+          data-service={s.id}
+          role="button"
+          tabindex="0"
+          aria-label={`Ver proyectos de ${s.title}`}
+        >
+          <div class="service-num">{s.num}</div>
+          <div class="service-icon" set:html={s.icon} />
+          <div class="service-title">{s.title}</div>
+          <div class="service-desc">{s.desc}</div>
+          <div class="service-cta">Ver proyectos →</div>
         </div>
-        <div class="service-title">Pergolados</div>
-        <div class="service-desc">Estructuras decorativas techadas para exteriores de lujo, piscinas y áreas de descanso en resorts y hoteles.</div>
-      </div>
-
-      <div class="service-card fade-in" style="transition-delay:0.05s">
-        <div class="service-num">02</div>
-        <div class="service-icon">
-          <svg viewBox="0 0 48 48"><rect x="6" y="6" width="36" height="36" rx="1"/><line x1="14" y1="6" x2="14" y2="42"/><line x1="22" y1="6" x2="22" y2="42"/><line x1="30" y1="6" x2="30" y2="42"/><line x1="6" y1="14" x2="42" y2="14"/><line x1="6" y1="22" x2="42" y2="22"/><line x1="6" y1="30" x2="42" y2="30"/></svg>
-        </div>
-        <div class="service-title">Celosías</div>
-        <div class="service-desc">Paneles calados de fibra de vidrio para fachadas, divisiones y elementos decorativos en interiores y exteriores.</div>
-      </div>
-
-      <div class="service-card fade-in" style="transition-delay:0.10s">
-        <div class="service-num">03</div>
-        <div class="service-icon">
-          <svg viewBox="0 0 48 48"><path d="M4 20 Q24 8 44 20"/><path d="M4 20 H44"/><path d="M8 20 V38 H40 V20"/><path d="M16 38 V44 M32 38 V44"/></svg>
-        </div>
-        <div class="service-title">Plafones</div>
-        <div class="service-desc">Techos decorativos con diseños personalizados: curvos, artísticos y funcionales para lobbies, restaurantes y spas.</div>
-      </div>
-
-      <div class="service-card fade-in" style="transition-delay:0.15s">
-        <div class="service-num">04</div>
-        <div class="service-icon">
-          <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="8"/><line x1="24" y1="4" x2="24" y2="12"/><line x1="24" y1="36" x2="24" y2="44"/><line x1="4" y1="24" x2="12" y2="24"/><line x1="36" y1="24" x2="44" y2="24"/></svg>
-        </div>
-        <div class="service-title">Decorativos</div>
-        <div class="service-desc">Piezas artísticas únicas, esculturas, elementos ornamentales y aplicaciones especiales diseñadas a medida.</div>
-      </div>
-
-      <div class="service-card fade-in" style="transition-delay:0.20s">
-        <div class="service-num">05</div>
-        <div class="service-icon">
-          <svg viewBox="0 0 48 48"><rect x="6" y="4" width="10" height="40" rx="1"/><rect x="32" y="4" width="10" height="40" rx="1"/><path d="M16 12 Q24 8 32 12"/><path d="M16 24 Q24 20 32 24"/><path d="M16 36 Q24 32 32 36"/></svg>
-        </div>
-        <div class="service-title">Mamparas</div>
-        <div class="service-desc">Divisiones y separadores decorativos para espacios interiores, restaurantes, lobbies y áreas de recreación.</div>
-      </div>
-
-      <div class="service-card fade-in" style="transition-delay:0.25s">
-        <div class="service-num">06</div>
-        <div class="service-icon">
-          <svg viewBox="0 0 48 48"><ellipse cx="24" cy="38" rx="14" ry="6"/><path d="M10 38 Q10 20 18 16 Q24 10 30 16 Q38 20 38 38"/><path d="M20 16 Q24 4 28 16"/></svg>
-        </div>
-        <div class="service-title">Macetas</div>
-        <div class="service-desc">Jardineras decorativas de fibra de vidrio de alta durabilidad, en cualquier forma, tamaño y acabado.</div>
-      </div>
-
-      <div class="service-card fade-in" style="transition-delay:0.30s">
-        <div class="service-num">07</div>
-        <div class="service-icon">
-          <svg viewBox="0 0 48 48"><line x1="12" y1="44" x2="12" y2="8"/><line x1="24" y1="44" x2="24" y2="4"/><line x1="36" y1="44" x2="36" y2="10"/><path d="M8 8 Q12 2 16 8"/><path d="M20 4 Q24 0 28 4"/><path d="M32 10 Q36 4 40 10"/></svg>
-        </div>
-        <div class="service-title">Morillos y Bamboos</div>
-        <div class="service-desc">Simulación de bamboo y madera en fibra de vidrio: la estética natural con la durabilidad del composite. Ideal para exteriores costeros.</div>
-      </div>
-
+      ))}
     </div>
   </div>
 </section>
+
+<!-- Modal -->
+<div class="svc-backdrop" id="svcBackdrop" aria-hidden="true">
+  <div class="svc-modal" id="svcModal" role="dialog" aria-modal="true">
+    <button class="svc-close" id="svcClose" aria-label="Cerrar">&times;</button>
+    <div class="svc-modal-header">
+      <span class="label" id="svcLabel"></span>
+      <h3 class="svc-modal-title" id="svcTitle"></h3>
+      <p class="svc-modal-desc" id="svcDesc"></p>
+    </div>
+    <div class="svc-projects-label">Proyectos realizados</div>
+    <div class="svc-projects-grid" id="svcProjectsGrid"></div>
+  </div>
+</div>
+
+<style is:global>
+  /* ── Service card click affordance ── */
+  .service-card {
+    cursor: pointer;
+  }
+  .service-cta {
+    margin-top: 16px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .service-card:hover .service-cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Backdrop ── */
+  .svc-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+  .svc-backdrop.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ── Modal box ── */
+  .svc-modal {
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 780px;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 48px;
+    position: relative;
+    transform: translateY(16px) scale(0.97);
+    opacity: 0;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease;
+  }
+  .svc-backdrop.open .svc-modal {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  /* ── Close button ── */
+  .svc-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    background: none;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--gray);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .svc-close:hover {
+    background: var(--red);
+    border-color: var(--red);
+    color: #fff;
+  }
+
+  /* ── Modal header ── */
+  .svc-modal-header {
+    margin-bottom: 32px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #eee;
+  }
+  .svc-modal-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    margin-bottom: 10px;
+  }
+  .svc-modal-desc {
+    font-size: 0.9rem;
+    color: var(--gray);
+    line-height: 1.65;
+  }
+
+  /* ── Projects grid inside modal ── */
+  .svc-projects-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 16px;
+  }
+  .svc-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .svc-proj-card {
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--black);
+    aspect-ratio: 4/3;
+    position: relative;
+  }
+  .svc-proj-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px;
+  }
+  .svc-proj-placeholder svg {
+    width: 28px;
+    height: 28px;
+    stroke: rgba(255,255,255,0.2);
+    fill: none;
+    stroke-width: 1.5;
+  }
+  .svc-proj-placeholder-text {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+  }
+  .svc-proj-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 16px;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+  }
+  .svc-proj-name {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 3px;
+  }
+  .svc-proj-meta {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.5);
+    display: flex;
+    gap: 8px;
+  }
+  .svc-proj-meta span:first-child { color: rgba(200,16,46,0.85); }
+
+  /* Placeholder gradient colours — cycling through 7 */
+  .svc-proj-card:nth-child(1) { background: linear-gradient(135deg, #1a0a0d, #2d1018); }
+  .svc-proj-card:nth-child(2) { background: linear-gradient(135deg, #0a0a1a, #101030); }
+  .svc-proj-card:nth-child(3) { background: linear-gradient(135deg, #0d1a0a, #1a2d10); }
+  .svc-proj-card:nth-child(4) { background: linear-gradient(135deg, #1a150a, #2d2210); }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .svc-modal { padding: 28px 20px; }
+    .svc-projects-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const SERVICES: Record<string, { title: string; desc: string; projects: { name: string; location: string; year: string }[] }> = {
+    pergolados: {
+      title: 'Pergolados',
+      desc: 'Estructuras decorativas techadas para exteriores de lujo, piscinas y áreas de descanso en resorts y hoteles.',
+      projects: [
+        { name: 'Royalton Riviera Cancún', location: 'Riviera Maya', year: '2022' },
+        { name: 'Hotel AVA Cancún',        location: 'Cancún',       year: '2023' },
+        { name: 'Westin Cancún',           location: 'Cancún',       year: '2020' },
+        { name: 'Hyatt Ziva Cancún',       location: 'Cancún',       year: '2019' },
+      ],
+    },
+    celosias: {
+      title: 'Celosías',
+      desc: 'Paneles calados de fibra de vidrio para fachadas, divisiones y elementos decorativos en interiores y exteriores.',
+      projects: [
+        { name: 'Royalton Riviera Cancún',    location: 'Riviera Maya', year: '2022' },
+        { name: 'Xcaret Arte',                location: 'Quintana Roo', year: '2020' },
+        { name: 'Paradisus Playa del Carmen', location: 'Riviera Maya', year: '2017' },
+        { name: 'Hard Rock Riviera Maya',     location: 'Riviera Maya', year: '2018' },
+      ],
+    },
+    plafones: {
+      title: 'Plafones',
+      desc: 'Techos decorativos con diseños personalizados: curvos, artísticos y funcionales para lobbies, restaurantes y spas.',
+      projects: [
+        { name: 'Royalton Riviera Cancún', location: 'Riviera Maya',      year: '2022' },
+        { name: 'Tren Maya — SEDENA',      location: 'Nacional',          year: '2023' },
+        { name: 'Aloft Cancún',            location: 'Cancún',            year: '2021' },
+        { name: 'Secrets Moxche',          location: 'Playa del Carmen',  year: '2022' },
+      ],
+    },
+    decorativos: {
+      title: 'Decorativos',
+      desc: 'Piezas artísticas únicas, esculturas, elementos ornamentales y aplicaciones especiales diseñadas a medida.',
+      projects: [
+        { name: 'Four Seasons East Cape', location: 'Los Cabos',    year: '2021' },
+        { name: 'Xcaret Arte',            location: 'Quintana Roo', year: '2020' },
+        { name: 'Tren Maya — SEDENA',     location: 'Nacional',     year: '2023' },
+        { name: 'Aloft Cancún',           location: 'Cancún',       year: '2021' },
+      ],
+    },
+    mamparas: {
+      title: 'Mamparas',
+      desc: 'Divisiones y separadores decorativos para espacios interiores, restaurantes, lobbies y áreas de recreación.',
+      projects: [
+        { name: 'Four Seasons East Cape', location: 'Los Cabos', year: '2021' },
+        { name: 'Hyatt Ziva Cancún',      location: 'Cancún',    year: '2019' },
+        { name: 'Tren Maya — SEDENA',     location: 'Nacional',  year: '2023' },
+      ],
+    },
+    macetas: {
+      title: 'Macetas',
+      desc: 'Jardineras decorativas de fibra de vidrio de alta durabilidad, en cualquier forma, tamaño y acabado.',
+      projects: [
+        { name: 'Secrets Moxche',        location: 'Playa del Carmen', year: '2022' },
+        { name: 'Westin Cancún',         location: 'Cancún',           year: '2020' },
+        { name: 'Margaritaville Resort', location: 'Cancún',           year: '2022' },
+      ],
+    },
+    morillos: {
+      title: 'Morillos y Bamboos',
+      desc: 'Simulación de bamboo y madera en fibra de vidrio: la estética natural con la durabilidad del composite.',
+      projects: [
+        { name: 'Hotel AVA Cancún',       location: 'Cancún',       year: '2023' },
+        { name: 'Hard Rock Riviera Maya', location: 'Riviera Maya', year: '2018' },
+        { name: 'Margaritaville Resort',  location: 'Cancún',       year: '2022' },
+      ],
+    },
+  };
+
+  const backdrop  = document.getElementById('svcBackdrop')!;
+  const modal     = document.getElementById('svcModal')!;
+  const closeBtn  = document.getElementById('svcClose')!;
+  const labelEl   = document.getElementById('svcLabel')!;
+  const titleEl   = document.getElementById('svcTitle')!;
+  const descEl    = document.getElementById('svcDesc')!;
+  const gridEl    = document.getElementById('svcProjectsGrid')!;
+
+  function openModal(serviceId: string) {
+    const data = SERVICES[serviceId];
+    if (!data) return;
+
+    labelEl.textContent = 'Nuestros Proyectos';
+    titleEl.textContent = data.title;
+    descEl.textContent  = data.desc;
+
+    gridEl.innerHTML = data.projects.map(p => `
+      <div class="svc-proj-card">
+        <div class="svc-proj-placeholder">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="svc-proj-placeholder-text">Foto próximamente</span>
+        </div>
+        <div class="svc-proj-info">
+          <div class="svc-proj-name">${p.name}</div>
+          <div class="svc-proj-meta"><span>${p.year}</span><span>${p.location}</span></div>
+        </div>
+      </div>
+    `).join('');
+
+    backdrop.classList.add('open');
+    backdrop.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    backdrop.classList.remove('open');
+    backdrop.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  // Card clicks
+  document.querySelectorAll('.service-card[data-service]').forEach(card => {
+    card.addEventListener('click', () => {
+      openModal((card as HTMLElement).dataset.service!);
+    });
+    card.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+        e.preventDefault();
+        openModal((card as HTMLElement).dataset.service!);
+      }
+    });
+  });
+
+  // Close on button, backdrop click, and Escape
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', (e) => {
+    if (e.target === backdrop) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>
