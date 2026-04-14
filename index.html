@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Red Mangle · Construfibra & Eventos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ─────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red:       #C8102E;
+      --red-dark:  #A00D24;
+      --black:     #111111;
+      --gray-dark: #1a1a1a;
+      --gray-mid:  #2a2a2a;
+      --gray:      #888;
+      --off-white: #F5F5F5;
+      --white:     #ffffff;
+      --font:      'Inter', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--off-white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─────────────────────────────────────────
+       UTILITY
+    ───────────────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .section-title span { color: var(--red); }
+    .label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─────────────────────────────────────────
+       NAVBAR
+    ───────────────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 20px 0;
+      transition: background 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(17, 17, 17, 0.97);
+      padding: 12px 0;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.5);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 1.3rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      line-height: 1;
+    }
+    .nav-logo .red { color: var(--red); }
+    .nav-logo .sub {
+      display: block;
+      font-size: 0.55rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: var(--gray);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--red); }
+    .nav-cta {
+      background: var(--red);
+      color: var(--white) !important;
+      padding: 8px 20px;
+      border-radius: 2px;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--red-dark) !important; color: var(--white) !important; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0; right: 0;
+      background: rgba(17,17,17,0.98);
+      padding: 24px;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: rgba(255,255,255,0.8);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--red); }
+
+    /* ─────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────── */
+    #inicio {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 60% 40%, rgba(200,16,46,0.15) 0%, transparent 60%),
+        linear-gradient(160deg, #0d0d0d 0%, #1a0a0d 50%, #111111 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Animated grain texture */
+    #inicio::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
+      animation: grain 8s steps(10) infinite;
+    }
+    @keyframes grain {
+      0%, 100% { transform: translate(0, 0); }
+      10% { transform: translate(-2%, -3%); }
+      20% { transform: translate(3%, 2%); }
+      30% { transform: translate(-1%, 4%); }
+      40% { transform: translate(4%, -1%); }
+      50% { transform: translate(-3%, 3%); }
+      60% { transform: translate(2%, -4%); }
+      70% { transform: translate(-4%, 1%); }
+      80% { transform: translate(3%, -2%); }
+      90% { transform: translate(-2%, 4%); }
+    }
+    /* Geometric accent */
+    #inicio::after {
+      content: '';
+      position: absolute;
+      right: -100px;
+      bottom: -100px;
+      width: 600px;
+      height: 600px;
+      border: 1px solid rgba(200,16,46,0.12);
+      border-radius: 50%;
+    }
+    .hero-ring {
+      position: absolute;
+      right: 60px;
+      bottom: 60px;
+      width: 400px;
+      height: 400px;
+      border: 1px solid rgba(200,16,46,0.08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 860px;
+      padding: 0 24px;
+    }
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      color: var(--white);
+      margin-bottom: 28px;
+    }
+    .hero-title .line-red { color: var(--red); }
+    .hero-sub {
+      font-size: clamp(0.85rem, 1.5vw, 1rem);
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 48px;
+    }
+    .hero-sub span { color: rgba(255,255,255,0.25); margin: 0 8px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 36px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--red);
+      color: var(--white);
+      border: none;
+    }
+    .btn-primary:hover {
+      background: var(--red-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(200,16,46,0.35);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.25);
+      margin-left: 12px;
+    }
+    .btn-outline:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, rgba(200,16,46,0.6), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+
+    /* ─────────────────────────────────────────
+       NOSOTROS
+    ───────────────────────────────────────── */
+    #nosotros {
+      padding: 120px 0;
+      background: var(--white);
+    }
+    .nosotros-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .nosotros-left .big-quote {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+      color: var(--black);
+    }
+    .nosotros-left .big-quote em {
+      font-style: normal;
+      color: var(--red);
+    }
+    .nosotros-left p {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: #444;
+      margin-bottom: 16px;
+    }
+    .red-bar {
+      width: 48px;
+      height: 3px;
+      background: var(--red);
+      margin-bottom: 28px;
+    }
+    .stats-row {
+      display: flex;
+      gap: 40px;
+      margin-top: 48px;
+      padding-top: 40px;
+      border-top: 1px solid #eee;
+    }
+    .stat-item { flex: 1; }
+    .stat-num {
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--red);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-top: 6px;
+    }
+    .nosotros-right {
+      position: relative;
+      padding-top: 20px;
+    }
+    .nosotros-card {
+      background: var(--black);
+      color: var(--white);
+      padding: 40px;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .nosotros-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--red);
+    }
+    .nosotros-card p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 20px;
+    }
+    .nosotros-card p:last-child { margin-bottom: 0; }
+    .cert-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+    }
+    .badge {
+      background: rgba(200,16,46,0.15);
+      border: 1px solid rgba(200,16,46,0.3);
+      color: rgba(255,255,255,0.8);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 2px;
+    }
+
+    /* ─────────────────────────────────────────
+       SOLUCIONES
+    ───────────────────────────────────────── */
+    #soluciones {
+      padding: 120px 0;
+      background: var(--off-white);
+    }
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 60px;
+      gap: 24px;
+    }
+    .section-header p {
+      font-size: 0.95rem;
+      color: var(--gray);
+      max-width: 360px;
+      line-height: 1.6;
+      flex-shrink: 0;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+    .service-card {
+      background: var(--white);
+      padding: 36px 28px;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--red);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .service-card:hover::after { transform: scaleX(1); }
+    .service-card:hover { background: var(--black); }
+    .service-card:hover .service-title { color: var(--white); }
+    .service-card:hover .service-desc { color: rgba(255,255,255,0.5); }
+    .service-card:hover .service-icon svg { stroke: var(--red); }
+    .service-num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--red);
+      margin-bottom: 20px;
+    }
+    .service-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 20px;
+    }
+    .service-icon svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--black);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 0.3s ease;
+    }
+    .service-title {
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--black);
+      margin-bottom: 10px;
+      transition: color 0.3s ease;
+    }
+    .service-desc {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--gray);
+      transition: color 0.3s ease;
+    }
+
+    /* ─────────────────────────────────────────
+       PROYECTOS
+    ───────────────────────────────────────── */
+    #proyectos {
+      padding: 120px 0;
+      background: var(--white);
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 10px 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--gray);
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--red);
+      border-color: var(--red);
+      color: var(--white);
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+      background: var(--black);
+      aspect-ratio: 4/3;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .project-card.large {
+      grid-column: span 2;
+      aspect-ratio: 16/9;
+    }
+    .project-card:hover { transform: translateY(-4px); }
+    .project-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.5s ease;
+    }
+    .project-card:hover .project-bg { transform: scale(1.05); }
+    .project-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+    }
+    .project-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 24px;
+    }
+    .project-category {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 6px;
+    }
+    .project-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: 4px;
+    }
+    .project-meta {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.5);
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .project-value {
+      color: rgba(200,16,46,0.9);
+      font-weight: 700;
+    }
+    /* Project placeholder gradient backgrounds */
+    .proj-1  { background: linear-gradient(135deg, #1a0a0d, #2d1018); }
+    .proj-2  { background: linear-gradient(135deg, #0a0a1a, #101030); }
+    .proj-3  { background: linear-gradient(135deg, #0d1a0a, #1a2d10); }
+    .proj-4  { background: linear-gradient(135deg, #1a150a, #2d2210); }
+    .proj-5  { background: linear-gradient(135deg, #0a1a1a, #102d2d); }
+    .proj-6  { background: linear-gradient(135deg, #150a1a, #221030); }
+    .proj-7  { background: linear-gradient(135deg, #1a0a0a, #2d1010); }
+    .proj-8  { background: linear-gradient(135deg, #0a0d1a, #10152d); }
+    .proj-9  { background: linear-gradient(135deg, #0d1a12, #1a2d1e); }
+    .proj-10 { background: linear-gradient(135deg, #1a1a0a, #2d2d10); }
+    .proj-11 { background: linear-gradient(135deg, #0a1a15, #102d22); }
+    .proj-12 { background: linear-gradient(135deg, #1a0d0a, #2d1510); }
+
+    /* Pattern overlay for visual interest */
+    .proj-pattern::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.08;
+      background-image: repeating-linear-gradient(
+        45deg,
+        rgba(200,16,46,0.5) 0px,
+        rgba(200,16,46,0.5) 1px,
+        transparent 1px,
+        transparent 20px
+      );
+    }
+
+    /* ─────────────────────────────────────────
+       CLIENTES
+    ───────────────────────────────────────── */
+    #clientes {
+      padding: 80px 0;
+      background: var(--black);
+      overflow: hidden;
+    }
+    .clients-header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+    .clients-header .section-title { color: var(--white); }
+    .clients-header p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-top: 12px;
+    }
+    .clients-track-wrap {
+      overflow: hidden;
+      position: relative;
+    }
+    .clients-track-wrap::before,
+    .clients-track-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 120px;
+      z-index: 1;
+    }
+    .clients-track-wrap::before { left: 0; background: linear-gradient(to right, var(--black), transparent); }
+    .clients-track-wrap::after  { right: 0; background: linear-gradient(to left, var(--black), transparent); }
+    .clients-track {
+      display: flex;
+      gap: 0;
+      animation: scroll-left 30s linear infinite;
+      width: max-content;
+    }
+    .clients-track:hover { animation-play-state: paused; }
+    @keyframes scroll-left {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .client-name {
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      white-space: nowrap;
+      transition: color 0.2s;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+    .client-name:hover { color: var(--white); }
+    .client-dot {
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--red);
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    /* ─────────────────────────────────────────
+       CONTACTO
+    ───────────────────────────────────────── */
+    #contacto {
+      padding: 120px 0;
+      background: var(--off-white);
+    }
+    .contacto-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contacto-left .section-title { margin-bottom: 16px; }
+    .contacto-left .tagline {
+      font-size: 1rem;
+      color: var(--gray);
+      line-height: 1.6;
+      margin-bottom: 48px;
+    }
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--red);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--white);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .contact-text strong {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 3px;
+    }
+    .contact-text span, .contact-text a {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--black);
+    }
+    .contact-text a:hover { color: var(--red); }
+    .contacto-right form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: var(--white);
+      border: 1px solid #ddd;
+      border-radius: 2px;
+      padding: 14px 16px;
+      font-family: var(--font);
+      font-size: 0.9rem;
+      color: var(--black);
+      transition: border-color 0.2s ease;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--red);
+    }
+    .form-group textarea { resize: vertical; min-height: 140px; }
+    .form-submit {
+      margin-top: 8px;
+    }
+    .form-submit .btn { width: 100%; justify-content: center; }
+
+    /* ─────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      padding: 60px 0 32px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .footer-brand .nav-logo { font-size: 1.5rem; margin-bottom: 16px; display: block; }
+    .footer-brand p {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.7;
+      max-width: 260px;
+    }
+    .footer-social {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .social-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .social-btn:hover { background: var(--red); border-color: var(--red); }
+    .social-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: rgba(255,255,255,0.5);
+      transition: fill 0.2s;
+    }
+    .social-btn:hover svg { fill: var(--white); }
+    .footer-col h4 {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 20px;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-col ul a {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+      transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--red); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 28px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-bottom p {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.05em;
+    }
+    .footer-bottom .tagline-small {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(200,16,46,0.5);
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .services-grid { grid-template-columns: repeat(3, 1fr); }
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
+      .project-card.large { grid-column: span 2; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      #nosotros { padding: 80px 0; }
+      .nosotros-grid { grid-template-columns: 1fr; gap: 48px; }
+      .stats-row { gap: 24px; }
+
+      #soluciones { padding: 80px 0; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .section-header { flex-direction: column; align-items: flex-start; }
+
+      #proyectos { padding: 80px 0; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card.large { grid-column: span 1; aspect-ratio: 4/3; }
+
+      .contacto-grid { grid-template-columns: 1fr; gap: 48px; }
+      .form-row { grid-template-columns: 1fr; }
+
+      .footer-top { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+
+      .hero-title { font-size: clamp(2.2rem, 10vw, 3.5rem); }
+      .btn-outline { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .stats-row { flex-direction: column; gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════ -->
+  <nav id="navbar">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#inicio" class="nav-logo">
+          <span class="red">RED</span>MANGLE
+          <span class="sub">Construfibra &amp; Eventos</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#soluciones">Soluciones</a></li>
+          <li><a href="#proyectos">Proyectos</a></li>
+          <li><a href="#contacto" class="nav-cta">Contacto</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Menú">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <nav class="mobile-menu" id="mobileMenu">
+        <a href="#inicio" class="mobile-link">Inicio</a>
+        <a href="#nosotros" class="mobile-link">Nosotros</a>
+        <a href="#soluciones" class="mobile-link">Soluciones</a>
+        <a href="#proyectos" class="mobile-link">Proyectos</a>
+        <a href="#contacto" class="mobile-link">Contacto</a>
+      </nav>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════ -->
+  <section id="inicio">
+    <div class="hero-ring"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Cancún, México · Desde 2011</p>
+      <h1 class="hero-title">
+        Think<br>
+        <span class="line-red">Outside</span><br>
+        the Limits
+      </h1>
+      <p class="hero-sub">
+        Construcción <span>·</span> Arquitectura <span>·</span> Decoración <span>·</span> Fibra de Vidrio
+      </p>
+      <div>
+        <a href="#contacto" class="btn btn-primary">
+          Iniciar Proyecto
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#proyectos" class="btn btn-outline">Ver Portafolio</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>scroll</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       NOSOTROS
+  ═══════════════════════════════════════ -->
+  <section id="nosotros">
+    <div class="container">
+      <div class="nosotros-grid">
+        <div class="nosotros-left fade-in">
+          <span class="label">Quiénes Somos</span>
+          <div class="big-quote">
+            Aliados estratégicos del<br>
+            <em>diseño arquitectónico</em><br>
+            de lujo
+          </div>
+          <div class="red-bar"></div>
+          <p>
+            Red Mangle es una empresa mexicana especializada en soluciones de fibra de vidrio y arquitectura decorativa para proyectos de alto nivel en la Riviera Maya y toda la República Mexicana.
+          </p>
+          <p>
+            Trabajamos directamente con arquitectos, diseñadores de interiores y cadenas hoteleras para transformar conceptos creativos en estructuras duraderas y visualmente impactantes.
+          </p>
+          <div class="stats-row">
+            <div class="stat-item">
+              <div class="stat-num" data-target="15">0</div>
+              <div class="stat-label">Años de<br>Experiencia</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num" data-target="50">0</div>
+              <div class="stat-label">Proyectos<br>Entregados</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num" data-target="30">0</div>
+              <div class="stat-label">Millones USD<br>Ejecutados</div>
+            </div>
+          </div>
+        </div>
+        <div class="nosotros-right fade-in" style="transition-delay:0.15s">
+          <div class="nosotros-card">
+            <p>
+              Con más de 15 años de experiencia en el mercado, Red Mangle (Construfibra &amp; Eventos S de RL de CV) ha consolidado su posición como proveedor preferente de estructuras decorativas en fibra de vidrio para hoteles y desarrollos inmobiliarios de clase mundial.
+            </p>
+            <p>
+              Nuestro portafolio incluye proyectos para cadenas como Four Seasons, Royalton, Xcaret, Hard Rock, Hyatt, Westin y Margaritaville, así como obras de infraestructura nacional como las estaciones del Tren Maya (SEDENA).
+            </p>
+            <p>
+              Fabricamos e instalamos cada pieza bajo los más altos estándares de calidad, garantizando resistencia, precisión y acabados de nivel internacional.
+            </p>
+            <div class="cert-badges">
+              <span class="badge">Fabricación Propia</span>
+              <span class="badge">Instalación Certificada</span>
+              <span class="badge">Fibra de Vidrio</span>
+              <span class="badge">Proyectos Llave en Mano</span>
+              <span class="badge">Riviera Maya</span>
+              <span class="badge">Todo México</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SOLUCIONES
+  ═══════════════════════════════════════ -->
+  <section id="soluciones">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div>
+          <span class="label">Nuestras Soluciones</span>
+          <h2 class="section-title">Lo que <span>hacemos</span></h2>
+        </div>
+        <p>Soluciones integrales en fibra de vidrio y materiales compuestos para proyectos arquitectónicos de alto impacto.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-card fade-in">
+          <div class="service-num">01</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48">
+              <path d="M4 36 L24 12 L44 36" />
+              <path d="M4 36 H44" />
+              <path d="M8 36 V44 M40 36 V44" />
+              <path d="M14 28 H34" />
+            </svg>
+          </div>
+          <div class="service-title">Pergolados</div>
+          <div class="service-desc">Estructuras decorativas techadas para exteriores de lujo, piscinas y áreas de descanso en resorts y hoteles.</div>
+        </div>
+
+        <div class="service-card fade-in" style="transition-delay:0.05s">
+          <div class="service-num">02</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48">
+              <rect x="6" y="6" width="36" height="36" rx="1"/>
+              <line x1="14" y1="6" x2="14" y2="42"/>
+              <line x1="22" y1="6" x2="22" y2="42"/>
+              <line x1="30" y1="6" x2="30" y2="42"/>
+              <line x1="6" y1="14" x2="42" y2="14"/>
+              <line x1="6" y1="22" x2="42" y2="22"/>
+              <line x1="6" y1="30" x2="42" y2="30"/>
+            </svg>
+          </div>
+          <div class="service-title">Celosías</div>
+          <div class="service-desc">Paneles calados de fibra de vidrio para fachadas, divisiones y elementos decorativos en interiores y exteriores.</div>
+        </div>
+
+        <div class="service-card fade-in" style="transition-delay:0.10s">
+          <div class="service-num">03</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48">
+              <path d="M4 20 Q24 8 44 20"/>
+              <path d="M4 20 H44"/>
+              <path d="M8 20 V38 H40 V20"/>
+              <path d="M16 38 V44 M32 38 V44"/>
+            </svg>
+          </div>
+          <div class="service-title">Plafones</div>
+          <div class="service-desc">Techos decorativos con diseños personalizados: curvos, artísticos y funcionales para lobbies, restaurantes y spas.</div>
+        </div>
+
+        <div class="service-card fade-in" style="transition-delay:0.15s">
+          <div class="service-num">04</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48">
+              <circle cx="24" cy="24" r="16"/>
+              <circle cx="24" cy="24" r="8"/>
+              <line x1="24" y1="4" x2="24" y2="12"/>
+              <line x1="24" y1="36" x2="24" y2="44"/>
+              <line x1="4" y1="24" x2="12" y2="24"/>
+              <line x1="36" y1="24" x2="44" y2="24"/>
+            </svg>
+          </div>
+          <div class="service-title">Decorativos</div>
+          <div class="service-desc">Piezas artísticas únicas, esculturas, elementos ornamentales y aplicaciones especiales diseñadas a medida.</div>
+        </div>
+
+        <div class="service-card fade-in" style="transition-delay:0.20s">
+          <div class="service-num">05</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48">
+              <rect x="6" y="4" width="10" height="40" rx="1"/>
+              <rect x="32" y="4" width="10" height="40" rx="1"/>
+              <path d="M16 12 Q24 8 32 12"/>
+              <path d="M16 24 Q24 20 32 24"/>
+              <path d="M16 36 Q24 32 32 36"/>
+            </svg>
+          </div>
+          <div class="service-title">Mamparas</div>
+          <div class="service-desc">Divisiones y separadores decorativos para espacios interiores, restaurantes, lobbies y áreas de recreación.</div>
+        </div>
+
+        <div class="service-card fade-in" style="transition-delay:0.25s">
+          <div class="service-num">06</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48">
+              <ellipse cx="24" cy="38" rx="14" ry="6"/>
+              <path d="M10 38 Q10 20 18 16 Q24 10 30 16 Q38 20 38 38"/>
+              <path d="M20 16 Q24 4 28 16"/>
+            </svg>
+          </div>
+          <div class="service-title">Macetas</div>
+          <div class="service-desc">Jardineras decorativas de fibra de vidrio de alta durabilidad, en cualquier forma, tamaño y acabado.</div>
+        </div>
+
+        <div class="service-card fade-in" style="transition-delay:0.30s" style="grid-column: span 2;">
+          <div class="service-num">07</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 48 48">
+              <line x1="12" y1="44" x2="12" y2="8"/>
+              <line x1="24" y1="44" x2="24" y2="4"/>
+              <line x1="36" y1="44" x2="36" y2="10"/>
+              <path d="M8 8 Q12 2 16 8"/>
+              <path d="M20 4 Q24 0 28 4"/>
+              <path d="M32 10 Q36 4 40 10"/>
+            </svg>
+          </div>
+          <div class="service-title">Morillos y Bamboos</div>
+          <div class="service-desc">Simulación de bamboo y madera en fibra de vidrio: la estética natural con la durabilidad del composite. Ideal para exteriores costeros.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       PROYECTOS
+  ═══════════════════════════════════════ -->
+  <section id="proyectos">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div>
+          <span class="label">Portafolio</span>
+          <h2 class="section-title">Proyectos <span>Destacados</span></h2>
+        </div>
+        <p>Más de 50 proyectos entregados en la Riviera Maya, el Caribe y toda la República Mexicana.</p>
+      </div>
+      <div class="filter-tabs fade-in">
+        <button class="filter-btn active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="hotel">Hoteles</button>
+        <button class="filter-btn" data-filter="condo">Condominios</button>
+        <button class="filter-btn" data-filter="infra">Infraestructura</button>
+      </div>
+      <div class="projects-grid" id="projectsGrid">
+
+        <div class="project-card large fade-in" data-category="hotel">
+          <div class="project-bg proj-1 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Hotel · Riviera Maya</div>
+            <div class="project-name">Royalton Riviera Cancún</div>
+            <div class="project-meta">
+              <span>2022–2023</span>
+              <span>Pergolados · Plafones · Celosías</span>
+              <span class="project-value">$3.9M USD</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" data-category="hotel">
+          <div class="project-bg proj-2 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Hotel · Los Cabos</div>
+            <div class="project-name">Four Seasons East Cape</div>
+            <div class="project-meta">
+              <span>2021</span>
+              <span>Decorativos · Mamparas</span>
+              <span class="project-value">$2.4M USD</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" style="transition-delay:0.1s" data-category="hotel">
+          <div class="project-bg proj-3 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Hotel · Playa del Carmen</div>
+            <div class="project-name">Secrets Moxche</div>
+            <div class="project-meta">
+              <span>2022</span>
+              <span>Celosías · Macetas</span>
+              <span class="project-value">$1.8M USD</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card large fade-in" data-category="infra">
+          <div class="project-bg proj-4 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Infraestructura · Nacional</div>
+            <div class="project-name">Tren Maya — SEDENA</div>
+            <div class="project-meta">
+              <span>2023–2024</span>
+              <span>Plafones · Decorativos · Mamparas</span>
+              <span>Múltiples estaciones</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" style="transition-delay:0.05s" data-category="hotel">
+          <div class="project-bg proj-5 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Hotel · Cancún</div>
+            <div class="project-name">Hotel AVA Cancún</div>
+            <div class="project-meta">
+              <span>2023</span>
+              <span>Pergolados · Morillos</span>
+              <span class="project-value">$2.0M USD</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" style="transition-delay:0.10s" data-category="hotel">
+          <div class="project-bg proj-6 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Parque · Quintana Roo</div>
+            <div class="project-name">Xcaret Arte</div>
+            <div class="project-meta">
+              <span>2020–2021</span>
+              <span>Decorativos · Celosías</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" data-category="hotel">
+          <div class="project-bg proj-7 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Hotel · Cancún</div>
+            <div class="project-name">Hyatt Ziva Cancún</div>
+            <div class="project-meta">
+              <span>2019</span>
+              <span>Pergolados · Mamparas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" style="transition-delay:0.05s" data-category="condo">
+          <div class="project-bg proj-8 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Residencial · Cancún</div>
+            <div class="project-name">Aloft Cancún</div>
+            <div class="project-meta">
+              <span>2021</span>
+              <span>Plafones · Decorativos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" style="transition-delay:0.10s" data-category="hotel">
+          <div class="project-bg proj-9 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Hotel · Riviera Maya</div>
+            <div class="project-name">Hard Rock Riviera Maya</div>
+            <div class="project-meta">
+              <span>2018–2019</span>
+              <span>Celosías · Morillos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" data-category="hotel">
+          <div class="project-bg proj-10 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Hotel · Cancún</div>
+            <div class="project-name">Westin Cancún</div>
+            <div class="project-meta">
+              <span>2020</span>
+              <span>Pergolados · Macetas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" style="transition-delay:0.05s" data-category="condo">
+          <div class="project-bg proj-11 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Residencial · Riviera Maya</div>
+            <div class="project-name">Paradisus Playa del Carmen</div>
+            <div class="project-meta">
+              <span>2017</span>
+              <span>Celosías · Decorativos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" style="transition-delay:0.10s" data-category="hotel">
+          <div class="project-bg proj-12 proj-pattern"></div>
+          <div class="project-overlay"></div>
+          <div class="project-info">
+            <div class="project-category">Hotel · Cancún</div>
+            <div class="project-name">Margaritaville Beach Resort</div>
+            <div class="project-meta">
+              <span>2022</span>
+              <span>Morillos · Macetas · Plafones</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       CLIENTES
+  ═══════════════════════════════════════ -->
+  <section id="clientes">
+    <div class="container">
+      <div class="clients-header fade-in">
+        <span class="label">Confían en Nosotros</span>
+        <h2 class="section-title" style="color:var(--white)">Nuestros <span>Clientes</span></h2>
+        <p>Cadenas hoteleras y organismos de clase mundial en México y el Caribe</p>
+      </div>
+    </div>
+    <div class="clients-track-wrap">
+      <div class="clients-track" id="clientsTrack">
+        <!-- duplicated for seamless loop -->
+        <div class="client-name"><span class="client-dot"></span>Royalton</div>
+        <div class="client-name"><span class="client-dot"></span>Four Seasons</div>
+        <div class="client-name"><span class="client-dot"></span>Xcaret</div>
+        <div class="client-name"><span class="client-dot"></span>Hyatt</div>
+        <div class="client-name"><span class="client-dot"></span>Westin</div>
+        <div class="client-name"><span class="client-dot"></span>Hard Rock</div>
+        <div class="client-name"><span class="client-dot"></span>Margaritaville</div>
+        <div class="client-name"><span class="client-dot"></span>Paradisus</div>
+        <div class="client-name"><span class="client-dot"></span>Dreams Resorts</div>
+        <div class="client-name"><span class="client-dot"></span>SEDENA</div>
+        <div class="client-name"><span class="client-dot"></span>Planet Hollywood</div>
+        <div class="client-name"><span class="client-dot"></span>Secrets Resorts</div>
+        <div class="client-name"><span class="client-dot"></span>Aloft Hotels</div>
+        <div class="client-name"><span class="client-dot"></span>Royalton</div>
+        <div class="client-name"><span class="client-dot"></span>Four Seasons</div>
+        <div class="client-name"><span class="client-dot"></span>Xcaret</div>
+        <div class="client-name"><span class="client-dot"></span>Hyatt</div>
+        <div class="client-name"><span class="client-dot"></span>Westin</div>
+        <div class="client-name"><span class="client-dot"></span>Hard Rock</div>
+        <div class="client-name"><span class="client-dot"></span>Margaritaville</div>
+        <div class="client-name"><span class="client-dot"></span>Paradisus</div>
+        <div class="client-name"><span class="client-dot"></span>Dreams Resorts</div>
+        <div class="client-name"><span class="client-dot"></span>SEDENA</div>
+        <div class="client-name"><span class="client-dot"></span>Planet Hollywood</div>
+        <div class="client-name"><span class="client-dot"></span>Secrets Resorts</div>
+        <div class="client-name"><span class="client-dot"></span>Aloft Hotels</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       CONTACTO
+  ═══════════════════════════════════════ -->
+  <section id="contacto">
+    <div class="container">
+      <div class="contacto-grid">
+        <div class="contacto-left fade-in">
+          <span class="label">Hablemos</span>
+          <h2 class="section-title">Inicia tu <span>proyecto</span></h2>
+          <p class="tagline">Cuéntanos sobre tu proyecto y te presentamos una propuesta personalizada.</p>
+
+          <div class="contact-detail">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+            </div>
+            <div class="contact-text">
+              <strong>Teléfonos</strong>
+              <span>
+                <a href="tel:+529988503011">(+52) 998 850 3011</a><br>
+                <a href="tel:+529988495507">(+52) 998 849 5507</a>
+              </span>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div class="contact-text">
+              <strong>Correo Electrónico</strong>
+              <a href="mailto:ventas@redmangle.com">ventas@redmangle.com</a>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="contact-text">
+              <strong>Dirección</strong>
+              <span>Carretera Cancún–Aeropuerto km 17<br>Bld Luis Donaldo Colosio, calle Monte Líbano<br>C.P. 77560, Cancún Q.R., México</span>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="contact-text">
+              <strong>Horario</strong>
+              <span>Lunes – Viernes: 8:00 – 18:00<br>Sábado: 9:00 – 14:00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="contacto-right fade-in" style="transition-delay:0.15s">
+          <form id="contactForm" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nombre">Nombre *</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+              </div>
+              <div class="form-group">
+                <label for="empresa">Empresa</label>
+                <input type="text" id="empresa" name="empresa" placeholder="Tu empresa" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Correo *</label>
+                <input type="email" id="email" name="email" placeholder="tu@empresa.com" required />
+              </div>
+              <div class="form-group">
+                <label for="tel">Teléfono</label>
+                <input type="tel" id="tel" name="tel" placeholder="+52 998 000 0000" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="servicio">Servicio de Interés</label>
+              <select id="servicio" name="servicio">
+                <option value="">Selecciona un servicio...</option>
+                <option>Pergolados</option>
+                <option>Celosías</option>
+                <option>Plafones</option>
+                <option>Decorativos</option>
+                <option>Mamparas</option>
+                <option>Macetas</option>
+                <option>Morillos y Bamboos</option>
+                <option>Proyecto integral</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="mensaje">Mensaje *</label>
+              <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos sobre tu proyecto: ubicación, dimensiones estimadas, tipo de acabado..." required></textarea>
+            </div>
+            <div class="form-submit">
+              <button type="submit" class="btn btn-primary">
+                Enviar Solicitud
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#inicio" class="nav-logo">
+            <span class="red">RED</span>MANGLE
+            <span class="sub">Construfibra &amp; Eventos</span>
+          </a>
+          <p>Especialistas en fibra de vidrio y soluciones arquitectónicas decorativas para proyectos de lujo en México y el Caribe.</p>
+          <div class="footer-social">
+            <a href="#" class="social-btn" aria-label="Instagram">
+              <svg viewBox="0 0 24 24"><path d="M16 4H8a4 4 0 00-4 4v8a4 4 0 004 4h8a4 4 0 004-4V8a4 4 0 00-4-4z"/><circle cx="12" cy="12" r="3"/><circle cx="16.5" cy="7.5" r="1"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 100-4 2 2 0 000 4z"/></svg>
+            </a>
+            <a href="https://wa.me/529988503011" class="social-btn" aria-label="WhatsApp">
+              <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Servicios</h4>
+          <ul>
+            <li><a href="#soluciones">Pergolados</a></li>
+            <li><a href="#soluciones">Celosías</a></li>
+            <li><a href="#soluciones">Plafones</a></li>
+            <li><a href="#soluciones">Decorativos</a></li>
+            <li><a href="#soluciones">Mamparas</a></li>
+            <li><a href="#soluciones">Macetas</a></li>
+            <li><a href="#soluciones">Morillos y Bamboos</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <ul>
+            <li><a href="#nosotros">Quiénes Somos</a></li>
+            <li><a href="#proyectos">Portafolio</a></li>
+            <li><a href="#clientes">Clientes</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="tel:+529988503011">(+52) 998 850 3011</a></li>
+            <li><a href="mailto:ventas@redmangle.com">ventas@redmangle.com</a></li>
+            <li><a href="#">www.redmangle.com</a></li>
+            <li><a href="https://wa.me/529988503011">WhatsApp</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Red Mangle · Construfibra &amp; Eventos S de RL de CV · Cancún, Quintana Roo</p>
+        <span class="tagline-small">Think Outside the Limits</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════
+       JAVASCRIPT
+  ═══════════════════════════════════════ -->
+  <script>
+    // ── Navbar scroll effect ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Hamburger menu ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+
+    // ── Intersection Observer: fade-in ──
+    const fadeEls = document.querySelectorAll('.fade-in');
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    fadeEls.forEach(el => fadeObserver.observe(el));
+
+    // ── Counter animation ──
+    function animateCounter(el, target, suffix) {
+      const duration = 1800;
+      const start = performance.now();
+      const update = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.floor(eased * target) + (progress === 1 ? suffix : '');
+        if (progress < 1) requestAnimationFrame(update);
+      };
+      requestAnimationFrame(update);
+    }
+
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target, 10);
+          const suffix = el.dataset.target === '30' ? 'M+' : '+';
+          animateCounter(el, target, suffix);
+          statObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.stat-num[data-target]').forEach(el => statObserver.observe(el));
+
+    // ── Project filter ──
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        projectCards.forEach(card => {
+          const match = filter === 'all' || card.dataset.category === filter;
+          card.style.display = match ? '' : 'none';
+        });
+      });
+    });
+
+    // ── Contact form (client-side only) ──
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const nombre = form.nombre.value.trim();
+      const email = form.email.value.trim();
+      const mensaje = form.mensaje.value.trim();
+      if (!nombre || !email || !mensaje) {
+        alert('Por favor completa los campos obligatorios.');
+        return;
+      }
+      const btn = form.querySelector('button[type="submit"]');
+      btn.textContent = '¡Mensaje enviado!';
+      btn.style.background = '#2a9d5c';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.innerHTML = 'Enviar Solicitud <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>';
+        btn.style.background = '';
+        btn.disabled = false;
+        form.reset();
+      }, 3500);
+    });
+  </script>
+</body>
+</html>
