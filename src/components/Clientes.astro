@@ -1,8 +1,18 @@
 ---
 const clients = [
-  'Royalton', 'Four Seasons', 'Xcaret', 'Hyatt', 'Westin',
-  'Hard Rock', 'Margaritaville', 'Paradisus', 'Dreams Resorts',
-  'SEDENA', 'Planet Hollywood', 'Secrets Resorts', 'Aloft Hotels',
+  { name: 'Royalton',         domain: 'royaltonresorts.com' },
+  { name: 'Four Seasons',     domain: 'fourseasons.com' },
+  { name: 'Xcaret',           domain: 'xcaret.com' },
+  { name: 'Hyatt',            domain: 'hyatt.com' },
+  { name: 'Westin',           domain: 'westin.com' },
+  { name: 'Hard Rock',        domain: 'hardrock.com' },
+  { name: 'Margaritaville',   domain: 'margaritavilleresorts.com' },
+  { name: 'Paradisus',        domain: 'melia.com' },
+  { name: 'Dreams Resorts',   domain: 'dreamsresorts.com' },
+  { name: 'SEDENA',           domain: 'gob.mx' },
+  { name: 'Planet Hollywood', domain: 'planethollywood.com' },
+  { name: 'Secrets Resorts',  domain: 'secretsresorts.com' },
+  { name: 'Aloft Hotels',     domain: 'alofthotels.com' },
 ];
 ---
 <section id="clientes">
@@ -15,10 +25,18 @@ const clients = [
   </div>
   <div class="clients-track-wrap">
     <div class="clients-track">
-      {/* Duplicated for seamless loop */}
-      {[...clients, ...clients].map(name => (
-        <div class="client-name">
-          <span class="client-dot"></span>{name}
+      {[...clients, ...clients].map(c => (
+        <div class="client-item">
+          <img
+            src={`https://logo.clearbit.com/${c.domain}`}
+            alt={c.name}
+            class="client-logo"
+            loading="lazy"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+          />
+          <span class="client-name-fallback">
+            <span class="client-dot"></span>{c.name}
+          </span>
         </div>
       ))}
     </div>

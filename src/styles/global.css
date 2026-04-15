@@ -651,10 +651,27 @@ a { text-decoration: none; color: inherit; }
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
-.client-name {
+.client-item {
   display: flex;
   align-items: center;
-  padding: 0 40px;
+  justify-content: center;
+  padding: 0 44px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+.client-logo {
+  height: 36px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+.client-item:hover .client-logo { opacity: 1; }
+.client-name-fallback {
+  display: none;
+  align-items: center;
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.2em;
@@ -662,9 +679,8 @@ a { text-decoration: none; color: inherit; }
   color: rgba(255,255,255,0.35);
   white-space: nowrap;
   transition: color 0.2s;
-  border-right: 1px solid rgba(255,255,255,0.06);
 }
-.client-name:hover { color: var(--white); }
+.client-item:hover .client-name-fallback { color: var(--white); }
 .client-dot {
   display: inline-block;
   width: 4px;
