@@ -1,18 +1,19 @@
 ---
 const clients = [
-  { name: 'Royalton',         domain: 'royaltonresorts.com' },
-  { name: 'Four Seasons',     domain: 'fourseasons.com' },
-  { name: 'Xcaret',           domain: 'xcaret.com' },
-  { name: 'Hyatt',            domain: 'hyatt.com' },
-  { name: 'Westin',           domain: 'westin.com' },
-  { name: 'Hard Rock',        domain: 'hardrock.com' },
-  { name: 'Margaritaville',   domain: 'margaritavilleresorts.com' },
-  { name: 'Paradisus',        domain: 'melia.com' },
-  { name: 'Dreams Resorts',   domain: 'dreamsresorts.com' },
-  { name: 'SEDENA',           domain: 'gob.mx' },
-  { name: 'Planet Hollywood', domain: 'planethollywood.com' },
-  { name: 'Secrets Resorts',  domain: 'secretsresorts.com' },
-  { name: 'Aloft Hotels',     domain: 'alofthotels.com' },
+  { name: 'Royalton',         local: '/images/clients/royalton.png' },
+  { name: 'Four Seasons',     local: '/images/clients/four-seasons.png' },
+  { name: 'Xcaret',           local: '/images/clients/xcaret.png' },
+  { name: 'Hyatt',            local: '/images/clients/hyatt.png' },
+  { name: 'Westin',           local: '/images/clients/westin.png' },
+  { name: 'Hard Rock',        local: '/images/clients/hard-rock.png' },
+  { name: 'Margaritaville',   local: '/images/clients/margaritaville.svg' },
+  { name: 'Paradisus',        local: '/images/clients/paradisus.png' },
+  { name: 'Dreams Resorts',   local: '/images/clients/dreams.png' },
+  { name: 'Senator',          local: '/images/clients/senator.png' },
+  { name: 'SEDENA',           local: '/images/clients/sedena.svg' },
+  { name: 'Planet Hollywood', local: '/images/clients/planet-hollywood.svg' },
+  { name: 'Secrets Resorts',  local: '/images/clients/secrets.png' },
+  { name: 'Aloft Hotels',     local: '/images/clients/aloft.svg' },
 ];
 ---
 <section id="clientes">
@@ -28,7 +29,7 @@ const clients = [
       {[...clients, ...clients].map(c => (
         <div class="client-item">
           <img
-            src={`https://logo.clearbit.com/${c.domain}`}
+            src={c.local}
             alt={c.name}
             class="client-logo"
             loading="lazy"
