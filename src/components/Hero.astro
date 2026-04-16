@@ -1,6 +1,19 @@
 ---
 ---
-<section id="inicio" style="background-image: url('/images/hero/pergolado-luces.webp'); background-size: cover; background-position: center;">
+<section id="inicio">
+  <!-- Slideshow background -->
+  <div class="hero-slides" aria-hidden="true">
+    <img class="hero-slide active" src="/images/hero/slideshow/slide-1.jpeg" alt="" fetchpriority="high" />
+    <img class="hero-slide" src="/images/hero/slideshow/slide-2.jpeg" alt="" loading="lazy" />
+    <img class="hero-slide" src="/images/hero/slideshow/slide-3.jpeg" alt="" loading="lazy" />
+    <img class="hero-slide" src="/images/hero/slideshow/slide-4.jpeg" alt="" loading="lazy" />
+    <img class="hero-slide" src="/images/hero/slideshow/slide-5.jpeg" alt="" loading="lazy" />
+    <img class="hero-slide" src="/images/hero/slideshow/slide-6.jpeg" alt="" loading="lazy" />
+    <img class="hero-slide" src="/images/hero/slideshow/slide-7.png"  alt="" loading="lazy" />
+  </div>
+  <!-- Dark overlay to keep text readable -->
+  <div class="hero-overlay" aria-hidden="true"></div>
+
   <div class="hero-top-fade"></div>
   <div class="hero-ring"></div>
   <div class="hero-content">
@@ -22,3 +35,19 @@
     <span>scroll</span>
   </div>
 </section>
+
+<script>
+  const slides = document.querySelectorAll<HTMLElement>('.hero-slide');
+  // First image stays 7 s, all others stay 4 s
+  const durations = [7000, 4000, 4000, 4000, 4000, 4000, 4000];
+  let current = 0;
+
+  function nextSlide() {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+    setTimeout(nextSlide, durations[current]);
+  }
+
+  setTimeout(nextSlide, durations[0]);
+</script>
