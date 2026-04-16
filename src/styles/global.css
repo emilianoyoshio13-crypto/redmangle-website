@@ -466,9 +466,10 @@ body.has-cursor #cursor { display: block; }
   transform: scale(1.08);
   transition: opacity 1.8s var(--ease);
   will-change: opacity, transform;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  filter: contrast(1.08) saturate(1.12) brightness(1.03);
+  image-rendering: auto;
+  backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+  filter: contrast(1.06) saturate(1.08) brightness(1.02);
 }
 /* Ken Burns slow zoom — active slide animates continuously */
 .hero-slide.active {
