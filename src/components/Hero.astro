@@ -1,7 +1,6 @@
 ---
 ---
 <section id="inicio">
-  <!-- Slideshow background -->
   <div class="hero-slides" aria-hidden="true">
     <img class="hero-slide active" src="/images/hero/slideshow/slide-1.jpeg" alt="" fetchpriority="high" />
     <img class="hero-slide" src="/images/hero/slideshow/slide-2.jpeg" alt="" loading="lazy" />
@@ -12,10 +11,7 @@
     <img class="hero-slide" src="/images/hero/slideshow/slide-7.jpg"  alt="" loading="lazy" />
   </div>
 
-  <!-- Dark overlay -->
   <div class="hero-overlay" aria-hidden="true"></div>
-
-  <!-- Architectural frame + coords -->
   <div class="hero-frame" aria-hidden="true"></div>
   <div class="hero-coords" aria-hidden="true">
     <div><span>LAT</span> 21.1619° N</div>
@@ -23,15 +19,13 @@
     <div><span>EST</span> 2011</div>
   </div>
 
-  <!-- Slide counter -->
   <div class="hero-counter" aria-hidden="true">
     <span class="hero-counter-current" id="heroCounter">01</span>
     <span class="hero-counter-divider"></span>
     <span class="hero-counter-total">07</span>
   </div>
 
-  <!-- Vertical side tag -->
-  <div class="hero-side-tag" aria-hidden="true">
+  <div class="hero-side-tag" aria-hidden="true" data-i18n="hero.sidetag">
     Cancún — México · Est. 2011
   </div>
 
@@ -40,16 +34,17 @@
   <div class="hero-content">
     <div class="hero-title-editorial">— Think Outside The Limits —</div>
     <img src="/images/logo-transparent.png" alt="Red Mangle" class="hero-logo" />
+    <p class="hero-tagline" data-i18n="hero.tagline">Structural Composites for Modern Architecture</p>
     <div class="hero-divider"></div>
-    <p class="hero-sub">
+    <p class="hero-sub" data-i18n-html="hero.sub">
       Construcción <span>·</span> Arquitectura <span>·</span> Decoración <span>·</span> Fibra de Vidrio
     </p>
     <div class="hero-actions">
-      <a href="#contacto" class="btn btn-primary">
+      <a href="#contacto" class="btn btn-primary" data-i18n-html="hero.cta">
         Iniciar Proyecto
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
-      <a href="#proyectos" class="btn btn-outline">Ver Portafolio</a>
+      <a href="#proyectos" class="btn btn-outline" data-i18n="hero.portfolio">Ver Portafolio</a>
     </div>
   </div>
 
@@ -62,7 +57,6 @@
 <script>
   const slides = document.querySelectorAll<HTMLElement>('.hero-slide');
   const counter = document.getElementById('heroCounter')!;
-  // First image 7 s, rest 4.5 s
   const durations = [7000, 4500, 4500, 4500, 4500, 4500, 4500];
   let current = 0;
 
@@ -70,7 +64,6 @@
     slides[current].classList.remove('active');
     current = (current + 1) % slides.length;
     const next = slides[current];
-    // Force animation restart by re-adding class on next frame
     void next.offsetWidth;
     next.classList.add('active');
     counter.textContent = String(current + 1).padStart(2, '0');

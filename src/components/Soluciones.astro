@@ -97,10 +97,10 @@ const delays = ['0s','0.05s','0.10s','0.15s','0.20s','0.25s','0.30s'];
   <div class="container">
     <div class="section-header fade-in">
       <div>
-        <span class="label"><span class="label-num">02 —</span>Nuestras Soluciones</span>
-        <h2 class="section-title">Lo que <span>hacemos</span></h2>
+        <span class="label"><span class="label-num">02 —</span><span data-i18n="soluciones.label">Nuestras Soluciones</span></span>
+        <h2 class="section-title" data-i18n-html="soluciones.title">Lo que <span>hacemos</span></h2>
       </div>
-      <p>Soluciones integrales en fibra de vidrio y materiales compuestos para proyectos arquitectónicos de alto impacto.</p>
+      <p data-i18n="soluciones.desc">Soluciones integrales en fibra de vidrio y materiales compuestos para proyectos arquitectónicos de alto impacto.</p>
     </div>
     <div class="services-grid">
       {services.map((s, i) => (
@@ -114,9 +114,9 @@ const delays = ['0s','0.05s','0.10s','0.15s','0.20s','0.25s','0.30s'];
         >
           <div class="service-num">{s.num}</div>
           <div class="service-icon" set:html={s.icon} />
-          <div class="service-title">{s.title}</div>
-          <div class="service-desc">{s.desc}</div>
-          <div class="service-cta">Ver proyectos →</div>
+          <div class="service-title" data-i18n={`svc.${s.id}.title`}>{s.title}</div>
+          <div class="service-desc" data-i18n={`svc.${s.id}.desc`}>{s.desc}</div>
+          <div class="service-cta" data-i18n="soluciones.cta">Ver proyectos →</div>
         </div>
       ))}
     </div>
@@ -132,7 +132,7 @@ const delays = ['0s','0.05s','0.10s','0.15s','0.20s','0.25s','0.30s'];
       <h3 class="svc-modal-title" id="svcTitle"></h3>
       <p class="svc-modal-desc" id="svcDesc"></p>
     </div>
-    <div class="svc-projects-label">Proyectos realizados</div>
+    <div class="svc-projects-label" data-i18n="modal.projects_done">Proyectos realizados</div>
     <div class="svc-projects-grid" id="svcProjectsGrid"></div>
   </div>
 </div>
@@ -323,74 +323,46 @@ const delays = ['0s','0.05s','0.10s','0.15s','0.20s','0.25s','0.30s'];
 </style>
 
 <script>
-  const SERVICES: Record<string, { title: string; desc: string; projects: { name: string; location: string; year: string; img?: string }[] }> = {
-    pergolados: {
-      title: 'Pergolados',
-      desc: 'Estructuras decorativas techadas para exteriores de lujo, piscinas y áreas de descanso en resorts y hoteles.',
-      projects: [
-        { name: 'Royalton Riviera Cancún', location: 'Riviera Maya', year: '2022', img: '/images/services/pergolado-1.webp' },
-        { name: 'Hotel AVA Cancún',        location: 'Cancún',       year: '2023', img: '/images/services/pergolado-2.webp' },
-        { name: 'Westin Cancún',           location: 'Cancún',       year: '2020', img: '/images/services/pergolado-3.webp' },
-        { name: 'Hyatt Ziva Cancún',       location: 'Cancún',       year: '2019', img: '/images/services/pergolado-4.webp' },
-      ],
-    },
-    celosias: {
-      title: 'Celosías',
-      desc: 'Paneles calados de fibra de vidrio para fachadas, divisiones y elementos decorativos en interiores y exteriores.',
-      projects: [
-        { name: 'Royalton Riviera Cancún',    location: 'Riviera Maya', year: '2022', img: '/images/services/celosia-1.webp' },
-        { name: 'Xcaret Arte',                location: 'Quintana Roo', year: '2020', img: '/images/services/celosia-2.webp' },
-        { name: 'Paradisus Playa del Carmen', location: 'Riviera Maya', year: '2017', img: '/images/services/celosia-3.webp' },
-        { name: 'Hard Rock Riviera Maya',     location: 'Riviera Maya', year: '2018', img: '/images/services/celosia-4.webp' },
-      ],
-    },
-    plafones: {
-      title: 'Plafones',
-      desc: 'Techos decorativos con diseños personalizados: curvos, artísticos y funcionales para lobbies, restaurantes y spas.',
-      projects: [
-        { name: 'Royalton Riviera Cancún', location: 'Riviera Maya',     year: '2022', img: '/images/services/plafon-1.webp' },
-        { name: 'Tren Maya — SEDENA',      location: 'Nacional',         year: '2023', img: '/images/services/plafon-2.webp' },
-        { name: 'Aloft Cancún',            location: 'Cancún',           year: '2021', img: '/images/services/plafon-3.webp' },
-        { name: 'Secrets Moxche',          location: 'Playa del Carmen', year: '2022', img: '/images/services/plafon-4.webp' },
-      ],
-    },
-    decorativos: {
-      title: 'Decorativos',
-      desc: 'Piezas artísticas únicas, esculturas, elementos ornamentales y aplicaciones especiales diseñadas a medida.',
-      projects: [
-        { name: 'Four Seasons East Cape', location: 'Los Cabos',    year: '2021', img: '/images/services/decorativo-1.webp' },
-        { name: 'Xcaret Arte',            location: 'Quintana Roo', year: '2020', img: '/images/services/decorativo-2.webp' },
-        { name: 'Tren Maya — SEDENA',     location: 'Nacional',     year: '2023', img: '/images/services/decorativo-3.webp' },
-        { name: 'Aloft Cancún',           location: 'Cancún',       year: '2021', img: '/images/services/decorativo-4.webp' },
-      ],
-    },
-    mamparas: {
-      title: 'Mamparas',
-      desc: 'Divisiones y separadores decorativos para espacios interiores, restaurantes, lobbies y áreas de recreación.',
-      projects: [
-        { name: 'Four Seasons East Cape', location: 'Los Cabos', year: '2021', img: '/images/services/mampara-1.webp' },
-        { name: 'Hyatt Ziva Cancún',      location: 'Cancún',    year: '2019', img: '/images/services/mampara-2.webp' },
-        { name: 'Tren Maya — SEDENA',     location: 'Nacional',  year: '2023', img: '/images/services/mampara-3.webp' },
-      ],
-    },
-    macetas: {
-      title: 'Macetas',
-      desc: 'Jardineras decorativas de fibra de vidrio de alta durabilidad, en cualquier forma, tamaño y acabado.',
-      projects: [
-        { name: 'Secrets Moxche',        location: 'Playa del Carmen', year: '2022', img: '/images/services/maceta-1.webp' },
-        { name: 'Westin Cancún',         location: 'Cancún',           year: '2020', img: '/images/services/maceta-2.webp' },
-        { name: 'Margaritaville Resort', location: 'Cancún',           year: '2022', img: '/images/services/maceta-3.webp' },
-      ],
-    },
-    morillos: {
-      title: 'Morillos y Bamboos',
-      desc: 'Simulación de bamboo y madera en fibra de vidrio: la estética natural con la durabilidad del composite.',
-      projects: [
-        { name: 'Hotel AVA Cancún',       location: 'Cancún',       year: '2023', img: '/images/services/morillo-1.webp' },
-        { name: 'Hard Rock Riviera Maya', location: 'Riviera Maya', year: '2018', img: '/images/services/morillo-2.webp' },
-        { name: 'Margaritaville Resort',  location: 'Cancún',       year: '2022', img: '/images/services/morillo-3.webp' },
-      ],
-    },
+  const SVC_PROJECTS: Record<string, { name: string; location: string; year: string; img?: string }[]> = {
+    pergolados: [
+      { name: 'Royalton Riviera Cancún', location: 'Riviera Maya', year: '2022', img: '/images/services/pergolado-1.webp' },
+      { name: 'Hotel AVA Cancún',        location: 'Cancún',       year: '2023', img: '/images/services/pergolado-2.webp' },
+      { name: 'Westin Cancún',           location: 'Cancún',       year: '2020', img: '/images/services/pergolado-3.webp' },
+      { name: 'Hyatt Ziva Cancún',       location: 'Cancún',       year: '2019', img: '/images/services/pergolado-4.webp' },
+    ],
+    celosias: [
+      { name: 'Royalton Riviera Cancún',    location: 'Riviera Maya', year: '2022', img: '/images/services/celosia-1.webp' },
+      { name: 'Xcaret Arte',                location: 'Quintana Roo', year: '2020', img: '/images/services/celosia-2.webp' },
+      { name: 'Paradisus Playa del Carmen', location: 'Riviera Maya', year: '2017', img: '/images/services/celosia-3.webp' },
+      { name: 'Hard Rock Riviera Maya',     location: 'Riviera Maya', year: '2018', img: '/images/services/celosia-4.webp' },
+    ],
+    plafones: [
+      { name: 'Royalton Riviera Cancún', location: 'Riviera Maya',     year: '2022', img: '/images/services/plafon-1.webp' },
+      { name: 'Tren Maya — SEDENA',      location: 'Nacional',         year: '2023', img: '/images/services/plafon-2.webp' },
+      { name: 'Aloft Cancún',            location: 'Cancún',           year: '2021', img: '/images/services/plafon-3.webp' },
+      { name: 'Secrets Moxche',          location: 'Playa del Carmen', year: '2022', img: '/images/services/plafon-4.webp' },
+    ],
+    decorativos: [
+      { name: 'Four Seasons East Cape', location: 'Los Cabos',    year: '2021', img: '/images/services/decorativo-1.webp' },
+      { name: 'Xcaret Arte',            location: 'Quintana Roo', year: '2020', img: '/images/services/decorativo-2.webp' },
+      { name: 'Tren Maya — SEDENA',     location: 'Nacional',     year: '2023', img: '/images/services/decorativo-3.webp' },
+      { name: 'Aloft Cancún',           location: 'Cancún',       year: '2021', img: '/images/services/decorativo-4.webp' },
+    ],
+    mamparas: [
+      { name: 'Four Seasons East Cape', location: 'Los Cabos', year: '2021', img: '/images/services/mampara-1.webp' },
+      { name: 'Hyatt Ziva Cancún',      location: 'Cancún',    year: '2019', img: '/images/services/mampara-2.webp' },
+      { name: 'Tren Maya — SEDENA',     location: 'Nacional',  year: '2023', img: '/images/services/mampara-3.webp' },
+    ],
+    macetas: [
+      { name: 'Secrets Moxche',        location: 'Playa del Carmen', year: '2022', img: '/images/services/maceta-1.webp' },
+      { name: 'Westin Cancún',         location: 'Cancún',           year: '2020', img: '/images/services/maceta-2.webp' },
+      { name: 'Margaritaville Resort', location: 'Cancún',           year: '2022', img: '/images/services/maceta-3.webp' },
+    ],
+    morillos: [
+      { name: 'Hotel AVA Cancún',       location: 'Cancún',       year: '2023', img: '/images/services/morillo-1.webp' },
+      { name: 'Hard Rock Riviera Maya', location: 'Riviera Maya', year: '2018', img: '/images/services/morillo-2.webp' },
+      { name: 'Margaritaville Resort',  location: 'Cancún',       year: '2022', img: '/images/services/morillo-3.webp' },
+    ],
   };
 
   const backdrop  = document.getElementById('svcBackdrop')!;
@@ -401,21 +373,34 @@ const delays = ['0s','0.05s','0.10s','0.15s','0.20s','0.25s','0.30s'];
   const descEl    = document.getElementById('svcDesc')!;
   const gridEl    = document.getElementById('svcProjectsGrid')!;
 
+  function getLang(): string {
+    return document.documentElement.lang || 'es';
+  }
+
+  function t(key: string): string {
+    const lang = getLang();
+    const dict = (window as any).__T;
+    if (dict && dict[lang] && dict[lang][key]) return dict[lang][key];
+    return key;
+  }
+
   function openModal(serviceId: string) {
-    const data = SERVICES[serviceId];
-    if (!data) return;
+    const projects = SVC_PROJECTS[serviceId];
+    if (!projects) return;
 
-    labelEl.textContent = 'Nuestros Proyectos';
-    titleEl.textContent = data.title;
-    descEl.textContent  = data.desc;
+    const lang = getLang();
+    labelEl.textContent = lang === 'en' ? 'Our Projects' : 'Nuestros Proyectos';
+    titleEl.textContent = t(`svc.${serviceId}.title`);
+    descEl.textContent  = t(`svc.${serviceId}.desc`);
 
-    gridEl.innerHTML = data.projects.map(p => `
+    const photoSoon = lang === 'en' ? 'Photo coming soon' : 'Foto próximamente';
+    gridEl.innerHTML = projects.map(p => `
       <div class="svc-proj-card">
         ${p.img
           ? `<img src="${p.img}" alt="${p.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />`
           : `<div class="svc-proj-placeholder">
                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-               <span class="svc-proj-placeholder-text">Foto próximamente</span>
+               <span class="svc-proj-placeholder-text">${photoSoon}</span>
              </div>`
         }
       </div>

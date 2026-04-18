@@ -13,7 +13,7 @@ import '../styles/global.css';
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <!-- Page loader -->
@@ -40,6 +40,176 @@ import '../styles/global.css';
   </a>
 
   <script>
+    // ── i18n: translations system ──
+    const T: Record<string, Record<string, string>> = {
+      en: {
+        'nav.inicio': 'Home', 'nav.nosotros': 'About', 'nav.soluciones': 'Solutions',
+        'nav.proyectos': 'Projects', 'nav.contacto': 'Contact',
+        'modal.label': 'Our Projects', 'modal.projects_done': 'Projects completed',
+        'proj.cat.hotel_rm': 'Hotel · Riviera Maya', 'proj.cat.hotel_lc': 'Hotel · Los Cabos',
+        'proj.cat.hotel_pdc': 'Hotel · Playa del Carmen', 'proj.cat.infra': 'Infrastructure · National',
+        'proj.cat.hotel_can': 'Hotel · Cancún', 'proj.cat.park_qr': 'Park · Quintana Roo',
+        'proj.cat.res_can': 'Residential · Cancún', 'proj.cat.res_rm': 'Residential · Riviera Maya',
+        'hero.tagline': 'Structural Composites for Modern Architecture',
+        'hero.sidetag': 'Cancún — Mexico · Est. 2011',
+        'hero.sub': 'Construction <span>·</span> Architecture <span>·</span> Decoration <span>·</span> Fiberglass',
+        'hero.cta': 'Start a Project <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
+        'hero.portfolio': 'View Portfolio',
+        'nosotros.label': 'Who We Are',
+        'nosotros.quote': 'Strategic allies in luxury<br><em>architectural design</em>',
+        'nosotros.p1': 'Red Mangle is a Mexican company specialized in fiberglass solutions and decorative architecture for high-end projects across the Riviera Maya and all of Mexico.',
+        'nosotros.p2': 'We work directly with architects, interior designers, and hotel chains to transform creative concepts into durable, visually stunning structures.',
+        'nosotros.stat1': 'Years of<br>Experience', 'nosotros.stat2': 'Projects<br>Delivered', 'nosotros.stat3': 'Million USD<br>Executed',
+        'nosotros.card1': 'With over 15 years of market experience, Red Mangle (Construfibra & Eventos S de RL de CV) has established itself as the preferred supplier of decorative fiberglass structures for world-class hotels and real estate developments.',
+        'nosotros.card2': 'Our portfolio includes projects for chains such as Four Seasons, Royalton, Xcaret, Hard Rock, Hyatt, Westin, and Margaritaville, as well as national infrastructure works like the Tren Maya stations (SEDENA).',
+        'nosotros.card3': 'We manufacture and install each piece under the highest quality standards, ensuring resistance, precision, and internationally-grade finishes.',
+        'nosotros.badge1': 'In-House Manufacturing', 'nosotros.badge2': 'Certified Installation',
+        'nosotros.badge3': 'Fiberglass', 'nosotros.badge4': 'Turnkey Projects',
+        'nosotros.badge5': 'Riviera Maya', 'nosotros.badge6': 'All of Mexico',
+        'soluciones.label': 'Our Solutions',
+        'soluciones.title': 'What we <span>do</span>',
+        'soluciones.desc': 'Comprehensive fiberglass and composite material solutions for high-impact architectural projects.',
+        'soluciones.cta': 'View projects →',
+        'svc.pergolados.title': 'Pergolas',
+        'svc.pergolados.desc': 'Decorative roofed structures for luxury outdoor areas, pools, and resort lounging spaces.',
+        'svc.celosias.title': 'Lattice Panels',
+        'svc.celosias.desc': 'Fiberglass lattice panels for facades, partitions, and decorative elements indoors and outdoors.',
+        'svc.plafones.title': 'Ceiling Panels',
+        'svc.plafones.desc': 'Custom decorative ceilings: curved, artistic, and functional designs for lobbies, restaurants, and spas.',
+        'svc.decorativos.title': 'Decorative Art',
+        'svc.decorativos.desc': 'Unique artistic pieces, sculptures, ornamental elements, and custom-designed special applications.',
+        'svc.mamparas.title': 'Partitions',
+        'svc.mamparas.desc': 'Decorative dividers and separators for indoor spaces, restaurants, lobbies, and recreation areas.',
+        'svc.macetas.title': 'Planters',
+        'svc.macetas.desc': 'High-durability decorative fiberglass planters in any shape, size, and finish.',
+        'svc.morillos.title': 'Faux Wood & Bamboo',
+        'svc.morillos.desc': 'Fiberglass bamboo and wood simulation: natural aesthetics with composite durability. Ideal for coastal exteriors.',
+        'proyectos.label': 'Portfolio', 'proyectos.title': 'Featured <span>Projects</span>',
+        'proyectos.desc': 'Over 50 projects delivered across the Riviera Maya, the Caribbean, and all of Mexico.',
+        'proyectos.all': 'All', 'proyectos.hotel': 'Hotels',
+        'proyectos.condo': 'Residential', 'proyectos.infra': 'Infrastructure',
+        'clientes.label': 'They Trust Us',
+        'clientes.title': 'Our <span>Clients</span>',
+        'clientes.desc': 'World-class hotel chains and organizations in Mexico and the Caribbean',
+        'contacto.label': "Let's Talk",
+        'contacto.title': 'Start your <span>project</span>',
+        'contacto.tagline': 'Tell us about your project and we\'ll prepare a customized proposal.',
+        'contacto.phones': 'Phone', 'contacto.email': 'Email',
+        'contacto.address': 'Address', 'contacto.hours': 'Hours',
+        'form.name': 'Name *', 'form.name_ph': 'Your name',
+        'form.company': 'Company', 'form.company_ph': 'Your company',
+        'form.email': 'Email *', 'form.email_ph': 'you@company.com',
+        'form.phone': 'Phone',
+        'form.service': 'Service of Interest', 'form.service_ph': 'Select a service...',
+        'form.message': 'Message *',
+        'form.message_ph': 'Tell us about your project: location, estimated dimensions, finish type...',
+        'form.submit': 'Send Request <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>',
+        'footer.desc': 'Specialists in fiberglass and decorative architectural solutions for luxury projects in Mexico and the Caribbean.',
+        'footer.services': 'Services', 'footer.company': 'Company', 'footer.contact': 'Contact',
+        'footer.about': 'About Us', 'footer.portfolio': 'Portfolio', 'footer.clients': 'Clients',
+      },
+      es: {
+        'nav.inicio': 'Inicio', 'nav.nosotros': 'Nosotros', 'nav.soluciones': 'Soluciones',
+        'nav.proyectos': 'Proyectos', 'nav.contacto': 'Contacto',
+        'modal.label': 'Nuestros Proyectos', 'modal.projects_done': 'Proyectos realizados',
+        'proj.cat.hotel_rm': 'Hotel · Riviera Maya', 'proj.cat.hotel_lc': 'Hotel · Los Cabos',
+        'proj.cat.hotel_pdc': 'Hotel · Playa del Carmen', 'proj.cat.infra': 'Infraestructura · Nacional',
+        'proj.cat.hotel_can': 'Hotel · Cancún', 'proj.cat.park_qr': 'Parque · Quintana Roo',
+        'proj.cat.res_can': 'Residencial · Cancún', 'proj.cat.res_rm': 'Residencial · Riviera Maya',
+        'hero.tagline': 'Compuestos Estructurales para Arquitectura Moderna',
+        'hero.sidetag': 'Cancún — México · Est. 2011',
+        'hero.sub': 'Construcción <span>·</span> Arquitectura <span>·</span> Decoración <span>·</span> Fibra de Vidrio',
+        'hero.cta': 'Iniciar Proyecto <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
+        'hero.portfolio': 'Ver Portafolio',
+        'nosotros.label': 'Quiénes Somos',
+        'nosotros.quote': 'Aliados estratégicos del<br><em>diseño arquitectónico</em><br>de lujo',
+        'nosotros.p1': 'Red Mangle es una empresa mexicana especializada en soluciones de fibra de vidrio y arquitectura decorativa para proyectos de alto nivel en la Riviera Maya y toda la República Mexicana.',
+        'nosotros.p2': 'Trabajamos directamente con arquitectos, diseñadores de interiores y cadenas hoteleras para transformar conceptos creativos en estructuras duraderas y visualmente impactantes.',
+        'nosotros.stat1': 'Años de<br>Experiencia', 'nosotros.stat2': 'Proyectos<br>Entregados', 'nosotros.stat3': 'Millones USD<br>Ejecutados',
+        'nosotros.card1': 'Con más de 15 años de experiencia en el mercado, Red Mangle (Construfibra & Eventos S de RL de CV) ha consolidado su posición como proveedor preferente de estructuras decorativas en fibra de vidrio para hoteles y desarrollos inmobiliarios de clase mundial.',
+        'nosotros.card2': 'Nuestro portafolio incluye proyectos para cadenas como Four Seasons, Royalton, Xcaret, Hard Rock, Hyatt, Westin y Margaritaville, así como obras de infraestructura nacional como las estaciones del Tren Maya (SEDENA).',
+        'nosotros.card3': 'Fabricamos e instalamos cada pieza bajo los más altos estándares de calidad, garantizando resistencia, precisión y acabados de nivel internacional.',
+        'nosotros.badge1': 'Fabricación Propia', 'nosotros.badge2': 'Instalación Certificada',
+        'nosotros.badge3': 'Fibra de Vidrio', 'nosotros.badge4': 'Proyectos Llave en Mano',
+        'nosotros.badge5': 'Riviera Maya', 'nosotros.badge6': 'Todo México',
+        'soluciones.label': 'Nuestras Soluciones',
+        'soluciones.title': 'Lo que <span>hacemos</span>',
+        'soluciones.desc': 'Soluciones integrales en fibra de vidrio y materiales compuestos para proyectos arquitectónicos de alto impacto.',
+        'soluciones.cta': 'Ver proyectos →',
+        'svc.pergolados.title': 'Pergolados',
+        'svc.pergolados.desc': 'Estructuras decorativas techadas para exteriores de lujo, piscinas y áreas de descanso en resorts y hoteles.',
+        'svc.celosias.title': 'Celosías',
+        'svc.celosias.desc': 'Paneles calados de fibra de vidrio para fachadas, divisiones y elementos decorativos en interiores y exteriores.',
+        'svc.plafones.title': 'Plafones',
+        'svc.plafones.desc': 'Techos decorativos con diseños personalizados: curvos, artísticos y funcionales para lobbies, restaurantes y spas.',
+        'svc.decorativos.title': 'Decorativos',
+        'svc.decorativos.desc': 'Piezas artísticas únicas, esculturas, elementos ornamentales y aplicaciones especiales diseñadas a medida.',
+        'svc.mamparas.title': 'Mamparas',
+        'svc.mamparas.desc': 'Divisiones y separadores decorativos para espacios interiores, restaurantes, lobbies y áreas de recreación.',
+        'svc.macetas.title': 'Macetas',
+        'svc.macetas.desc': 'Jardineras decorativas de fibra de vidrio de alta durabilidad, en cualquier forma, tamaño y acabado.',
+        'svc.morillos.title': 'Morillos y Bamboos',
+        'svc.morillos.desc': 'Simulación de bamboo y madera en fibra de vidrio: la estética natural con la durabilidad del composite. Ideal para exteriores costeros.',
+        'proyectos.label': 'Portafolio', 'proyectos.title': 'Proyectos <span>Destacados</span>',
+        'proyectos.desc': 'Más de 50 proyectos entregados en la Riviera Maya, el Caribe y toda la República Mexicana.',
+        'proyectos.all': 'Todos', 'proyectos.hotel': 'Hoteles',
+        'proyectos.condo': 'Condominios', 'proyectos.infra': 'Infraestructura',
+        'clientes.label': 'Confían en Nosotros',
+        'clientes.title': 'Nuestros <span>Clientes</span>',
+        'clientes.desc': 'Cadenas hoteleras y organismos de clase mundial en México y el Caribe',
+        'contacto.label': 'Hablemos',
+        'contacto.title': 'Inicia tu <span>proyecto</span>',
+        'contacto.tagline': 'Cuéntanos sobre tu proyecto y te presentamos una propuesta personalizada.',
+        'contacto.phones': 'Teléfonos', 'contacto.email': 'Correo Electrónico',
+        'contacto.address': 'Dirección', 'contacto.hours': 'Horario',
+        'form.name': 'Nombre *', 'form.name_ph': 'Tu nombre',
+        'form.company': 'Empresa', 'form.company_ph': 'Tu empresa',
+        'form.email': 'Correo *', 'form.email_ph': 'tu@empresa.com',
+        'form.phone': 'Teléfono',
+        'form.service': 'Servicio de Interés', 'form.service_ph': 'Selecciona un servicio...',
+        'form.message': 'Mensaje *',
+        'form.message_ph': 'Cuéntanos sobre tu proyecto: ubicación, dimensiones estimadas, tipo de acabado...',
+        'form.submit': 'Enviar Solicitud <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>',
+        'footer.desc': 'Especialistas en fibra de vidrio y soluciones arquitectónicas decorativas para proyectos de lujo en México y el Caribe.',
+        'footer.services': 'Servicios', 'footer.company': 'Empresa', 'footer.contact': 'Contacto',
+        'footer.about': 'Quiénes Somos', 'footer.portfolio': 'Portafolio', 'footer.clients': 'Clientes',
+      }
+    };
+
+    let currentLang = 'es';
+    (window as any).__T = T;
+
+    function setLang(lang: string) {
+      currentLang = lang;
+      const dict = T[lang];
+      if (!dict) return;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = (el as HTMLElement).dataset.i18n!;
+        if (dict[key]) el.textContent = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = (el as HTMLElement).dataset.i18nHtml!;
+        if (dict[key]) el.innerHTML = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = (el as HTMLElement).dataset.i18nPlaceholder!;
+        if (dict[key]) (el as HTMLInputElement | HTMLTextAreaElement).placeholder = dict[key];
+      });
+
+      document.querySelectorAll('.lang-toggle .lang-option').forEach(opt => {
+        opt.classList.toggle('active', (opt as HTMLElement).dataset.lang === lang);
+      });
+
+      document.documentElement.lang = lang;
+    }
+
+    document.querySelectorAll('.lang-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setLang(currentLang === 'es' ? 'en' : 'es');
+      });
+    });
+
     // ── Page loader: fade out after load
     window.addEventListener('load', () => {
       const loader = document.getElementById('page-loader');
