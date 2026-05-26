@@ -1,19 +1,97 @@
 ---
 import '../styles/global.css';
+const SITE = 'https://www.redmangle.com';
+const title = 'Red Mangle · Construfibra & Eventos — Fibra de Vidrio para Arquitectura de Lujo';
+const description = 'Especialistas en fibra de vidrio y soluciones arquitectónicas decorativas para proyectos de lujo en México y el Caribe. Pergolados, celosías, plafones y más.';
+const ogImage = `${SITE}/images/hero/slideshow/slide-1.jpeg`;
+const canonical = `${SITE}${Astro.url.pathname}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE}/#organization`,
+      name: 'Red Mangle',
+      legalName: 'Construfibra & Eventos S de RL de CV',
+      url: SITE,
+      logo: `${SITE}/images/logo-color.png`,
+      foundingDate: '2011',
+      sameAs: [],
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+52-998-850-3011',
+        email: 'ventas@redmangle.com',
+        contactType: 'sales',
+        areaServed: 'MX',
+        availableLanguage: ['Spanish', 'English']
+      }
+    },
+    {
+      '@type': ['LocalBusiness', 'GeneralContractor'],
+      '@id': `${SITE}/#business`,
+      name: 'Red Mangle — Construfibra & Eventos',
+      image: `${SITE}/images/logo-color.png`,
+      url: SITE,
+      telephone: '+52-998-850-3011',
+      email: 'ventas@redmangle.com',
+      priceRange: '$$$',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Cancún',
+        addressRegion: 'Quintana Roo',
+        addressCountry: 'MX'
+      },
+      areaServed: [
+        { '@type': 'Place', name: 'Riviera Maya' },
+        { '@type': 'Country', name: 'México' }
+      ]
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE}/#website`,
+      url: SITE,
+      name: 'Red Mangle',
+      description,
+      inLanguage: ['es-MX', 'en']
+    }
+  ]
+};
 ---
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Red Mangle · Construfibra & Eventos</title>
-  <meta name="description" content="Red Mangle — Especialistas en fibra de vidrio y soluciones arquitectónicas decorativas para proyectos de lujo en México y el Caribe." />
+  <meta name="theme-color" content="#ce0019" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Red Mangle" />
+  <meta property="og:locale" content="es_MX" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1170" />
+  <meta property="og:image:height" content="772" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
 </head>
 <body>
   <!-- Page loader -->
